@@ -1,0 +1,55 @@
+<div class="modal modal-blur fade" id="movement-modal" tabindex="-1" aria-labelledby="movement-modal-title" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+    <form class="modal-content" novalidate>
+      <div class="modal-header">
+        <h5 class="modal-title" id="movement-modal-title">Движение товара</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-secondary">
+          Товар: <strong data-role="product-name"></strong>
+        </p>
+        <input type="hidden" name="product_id">
+        <div class="mb-3">
+          <label class="form-label">Тип операции</label>
+          <div class="form-selectgroup w-100">
+            <label class="form-selectgroup-item flex-fill">
+              <input type="radio" name="movement_type" value="in" class="form-selectgroup-input" checked>
+              <span class="form-selectgroup-label">
+                <i class="ti ti-arrow-down-left text-green me-1"></i>Приход
+              </span>
+            </label>
+            <label class="form-selectgroup-item flex-fill">
+              <input type="radio" name="movement_type" value="out" class="form-selectgroup-input">
+              <span class="form-selectgroup-label">
+                <i class="ti ti-arrow-up-right text-red me-1"></i>Расход
+              </span>
+            </label>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="move-quantity">Количество</label>
+          <div class="input-group">
+            <input type="number" class="form-control" id="move-quantity" name="quantity"
+                   min="1" step="1" inputmode="numeric" required>
+            <span class="input-group-text" data-role="unit">шт.</span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="move-comment">Комментарий</label>
+          <input type="text" class="form-control" id="move-comment" name="comment" maxlength="255"
+                 placeholder="Например: поставка по счёту №125">
+        </div>
+        <div class="alert alert-danger d-none mb-0" data-role="error" role="alert"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">
+          Отмена
+        </button>
+        <button type="submit" class="btn btn-primary">
+          <i class="ti ti-check me-1"></i>Провести
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

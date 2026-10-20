@@ -1,0 +1,63 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{% block title %}Склад{% endblock %} · Учёт товаров</title>
+  
+  <script>
+    try {
+      var savedTheme = localStorage.getItem('inv-theme');
+      if (savedTheme === 'dark' || savedTheme === 'light') {
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+      }
+    } catch (e) {}
+  </script>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.41.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="{% static 'warehouse/css/custom.css' %}">
+  
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <div class="page">
+    {% include 'warehouse/partials/_sidebar.html' %}
+    
+    <div class="page-wrapper">
+      <div class="page-header d-print-none">
+        <div class="container-xl">
+          <div class="row g-2 align-items-center">
+            <div class="col">
+              <div class="page-pretitle">{% block page_pretitle %}Учёт товаров{% endblock %}</div>
+              <h2 class="page-title">{% block page_title %}{% endblock %}</h2>
+            </div>
+            <div class="col-12 col-md-auto ms-auto d-flex flex-wrap gap-2 align-items-center page-actions">
+              {% block page_actions %}{% endblock %}
+              {% include 'warehouse/partials/_theme_toggle.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="page-body">
+        <div class="container-xl">
+          {% block content %}{% endblock %}
+        </div>
+      </div>
+      
+      {% include 'warehouse/partials/_footer.html' %}
+    </div>
+  </div>
+  
+  {% include 'warehouse/partials/_movement_modal.html' %}
+  {% include 'warehouse/partials/_toasts.html' %}
+  
+  <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js"></script>
+  <script src="{% static 'warehouse/js/app.js' %}"></script>
+  
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

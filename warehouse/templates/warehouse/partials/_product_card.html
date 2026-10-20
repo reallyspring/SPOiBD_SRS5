@@ -1,0 +1,47 @@
+{% load l10n %}
+<div class="col-12 col-sm-6 col-lg-4" data-product-id="{{ product.pk }}">
+  <div class="card h-100">
+    
+    <div class="card-body">
+      
+      <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+        <div>
+          <a href="{{ product.get_absolute_url }}" class="text-reset fw-bold">
+            {{ product.name }}
+          </a>
+          <div class="text-secondary small">
+            {{ product.sku }} · {{ product.category.name }}
+          </div>
+        </div>
+        {% include 'warehouse/partials/_status_badge.html' %}
+      </div>
+
+      <div class="d-flex justify-content-between align-items-end">
+        
+        <div>
+          <div class="text-secondary small">Остаток</div>
+          <div class="h2 mb-0">
+            <span data-field="quantity">{{ product.quantity }}</span>
+            <span class="fs-5 text-secondary">{{ product.get_unit_display }}</span>
+          </div>
+        </div>
+
+        <div class="text-end">
+          <div class="text-secondary small">Цена</div>
+          <span class="price-editable fw-medium" 
+                data-action="edit-price" 
+                data-field="price"
+                data-value="{{ product.price|unlocalize }}">
+            {{ product.price|floatformat:"2g" }} ₽
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card-footer">
+      {% include 'warehouse/partials/_product_actions.html' %}
+    </div>
+
+  </div>
+</div>

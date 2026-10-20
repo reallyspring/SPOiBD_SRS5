@@ -1,0 +1,131 @@
+{% extends 'warehouse/base.html' %}
+{% load static l10n %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block page_pretitle %}
+  <a href="{% url 'warehouse:product_list' %}">Товары</a> / {{ product.sku }}
+{% endblock %}
+
+{% block page_title %}{{ product.name }}{% endblock %}
+
+{% block page_actions %}
+  <button type="button" class="btn btn-success"
+          data-bs-toggle="modal" data-bs-target="#movement-modal"
+          data-move-id="{{ product.pk }}" 
+          data-move-name="{{ product.name }}"
+          data-move-unit="{{ product.get_unit_display }}" 
+          data-move-type="in">
+    <i class="ti ti-plus me-1"></i>Приход
+  </button>
+  
+  <button type="button" class="btn btn-danger"
+          data-bs-toggle="modal" data-bs-target="#movement-modal"
+          data-move-id="{{ product.pk }}" 
+          data-move-name="{{ product.name }}"
+          data-move-unit="{{ product.get_unit_display }}" 
+          data-move-type="out">
+    <i class="ti ti-minus me-1"></i>Расход
+  </button>
+{% endblock %}
+
+{% block content %}
+  <div class="row row-cards">
+    <div class="col-lg-4">
+      <div class="card" data-product-id="{{ product.pk }}">
+        <div class="card-body">
+          
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="badge bg-{{ product.category.color }}-lt">{{ product.category.name }}</span>
+            {% include 'warehouse/partials/_status_badge.html' %}
+          </div>
+          
+          <div class="text-secondary">Остаток на складе</div>
+          <div class="display-6 fw-bold mb-3">
+            <span data-field="quantity">{{ product.quantity }}</span>
+            <span class="fs-3 text-secondary">{{ product.get_unit_display }}</span>
+          </div>
+          
+          <dl class="row mb-0">
+            <dt class="col-6 fw-normal text-secondary">Артикул</dt>
+            <dd class="col-6 text-end">{{ product.sku }}</dd>
+            
+            <dt class="col-6 fw-normal text-secondary">Цена</dt>
+            <dd class="col-6 text-end">
+              <span class="price-editable" 
+                    data-action="edit-price" 
+                    data-field="price"
+                    data-value="{{ product.price|unlocalize }}" 
+                    title="Нажмите, чтобы изменить">
+                {{ product.price|floatformat:"2g" }} ₽
+              </span>
+            </dd>
+            
+            <dt class="col-6 fw-normal text-secondary">Стоимость остатка</dt>
+            <dd class="col-6 text-end">
+              <span data-field="stock_value">{{ product.stock_value|floatformat:"2g" }} ₽</span>
+            </dd>
+            
+            <dt class="col-6 fw-normal text-secondary">Мин. остаток</dt>
+            <dd class="col-6 text-end">{{ product.min_quantity }} {{ product.get_unit_display }}</dd>
+            
+            <dt class="col-6 fw-normal text-secondary">Поставщик</dt>
+            <dd class="col-6 text-end">{{ product.supplier|default:"—" }}</dd>
+            
+            <dt class="col-6 fw-normal text-secondary">Всего пришло</dt>
+            <dd class="col-6 text-end text-green">+{{ totals.total_in|default:0 }}</dd>
+            
+            <dt class="col-6 fw-normal text-secondary">Всего ушло</dt>
+            <dd class="col-6 text-end text-red">-{{ totals.total_out|default:0 }}</dd>
+          </dl>
+          
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">История движения</h3>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table">
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Тип</th>
+                <th class="text-end">Кол-во</th>
+                <th class="d-none d-md-table-cell">Комментарий</th>
+              </tr>
+            </thead>
+            <tbody id="history-body" data-history-for="{{ product.pk }}">
+              {% for m in movements %}
+                {% include 'warehouse/partials/_movement_row.html' %}
+              {% empty %}
+                <tr class="empty-row">
+                  <td colspan="4" class="text-center text-secondary py-4">
+                    Операций ещё не было
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        
+        {% if has_more %}
+          <div class="card-footer text-center">
+            <button type="button" class="btn" id="history-more" data-offset="{{ movements|length }}">
+              <i class="ti ti-chevron-down me-1"></i>Показать ещё
+            </button>
+          </div>
+        {% endif %}
+        
+      </div>
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'warehouse/js/product_detail.js' %}"></script>
+{% endblock %}

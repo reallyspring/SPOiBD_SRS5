@@ -1,0 +1,43 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">
+      <i class="ti ti-alert-triangle text-orange me-1"></i>Заканчивается
+    </h3>
+    <div class="card-actions">
+      <a href="{% url 'warehouse:product_list' %}?low=1" class="btn btn-sm">Все</a>
+    </div>
+  </div>
+  <div class="list-group list-group-flush">
+    {% for product in low_stock %}
+      <div class="list-group-item" data-product-id="{{ product.pk }}">
+        <div class="row align-items-center g-2">
+          <div class="col text-truncate">
+            <a href="{{ product.get_absolute_url }}" class="text-reset d-block text-truncate">
+              {{ product.name }}
+            </a>
+            <div class="text-secondary small">
+              Остаток: <span data-field="quantity">{{ product.quantity }}</span> 
+              из мин. {{ product.min_quantity }} {{ product.get_unit_display }}
+            </div>
+          </div>
+          <div class="col-auto">
+            <button type="button" class="btn btn-sm btn-success"
+                    data-bs-toggle="modal" 
+                    data-bs-target="#movement-modal"
+                    data-move-id="{{ product.pk }}" 
+                    data-move-name="{{ product.name }}"
+                    data-move-unit="{{ product.get_unit_display }}" 
+                    data-move-type="in">
+              <i class="ti ti-plus me-1"></i>Пополнить
+            </button>
+          </div>
+
+        </div>
+      </div>
+    {% empty %}
+      <div class="list-group-item text-center text-secondary py-4">
+        <i class="ti ti-circle-check text-green me-1"></i>Все остатки в норме
+      </div>
+    {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,62 @@
+{% with url_name=request.resolver_match.url_name %}
+<aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
+  <div class="container-fluid">
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Открыть меню">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-brand navbar-brand-autodark">
+      <a href="{% url 'warehouse:dashboard' %}" class="d-flex align-items-center gap-2 text-reset text-decoration-none">
+        <i class="ti ti-building-warehouse fs-1"></i>
+        <span>Склад</span>
+      </a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="sidebar-menu">
+      <ul class="navbar-nav pt-lg-3">
+        
+        <li class="nav-item{% if url_name == 'dashboard' %} active{% endif %}">
+          <a class="nav-link" href="{% url 'warehouse:dashboard' %}">
+            <span class="nav-link-icon d-flex align-items-center justify-content-center">
+              <i class="ti ti-layout-dashboard"></i>
+            </span>
+            <span class="nav-link-title">Дашборд</span>
+          </a>
+        </li>
+
+        <li class="nav-item{% if url_name == 'product_list' or url_name == 'product_detail' %} active{% endif %}">
+          <a class="nav-link" href="{% url 'warehouse:product_list' %}">
+            <span class="nav-link-icon d-flex align-items-center justify-content-center">
+              <i class="ti ti-package"></i>
+            </span>
+            <span class="nav-link-title">Товары</span>
+            {% if low_stock_count %}
+              <span class="badge bg-orange-lt ms-auto" title="Заканчивается">{{ low_stock_count }}</span>
+            {% endif %}
+          </a>
+        </li>
+
+        <li class="nav-item{% if url_name == 'movement_list' %} active{% endif %}">
+          <a class="nav-link" href="{% url 'warehouse:movement_list' %}">
+            <span class="nav-link-icon d-flex align-items-center justify-content-center">
+              <i class="ti ti-arrows-exchange"></i>
+            </span>
+            <span class="nav-link-title">Журнал операций</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'admin:index' %}">
+            <span class="nav-link-icon d-flex align-items-center justify-content-center">
+              <i class="ti ti-settings"></i>
+            </span>
+            <span class="nav-link-title">Админка</span>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</aside>
+{% endwith %}

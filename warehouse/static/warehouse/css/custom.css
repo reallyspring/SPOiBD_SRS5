@@ -1,0 +1,159 @@
+/* Собственные стили поверх Tabler. Основа оформления — Tabler, здесь только доработки. */
+
+/* --- Подсветка изменённого элемента и плавное исчезновение --- */
+tr.flash > td,
+.flash {
+  animation: flash-bg 1s ease-out;
+}
+
+@keyframes flash-bg {
+  from {
+    background-color: rgba(var(--tblr-primary-rgb), 0.18);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* --- Счётчик в боковом меню: Tabler по умолчанию вешает бейдж в угол ссылки, ставим его в строку --- */
+.navbar-vertical .navbar-nav .nav-link .badge {
+  position: static;
+  transform: none;
+}
+
+/* --- Индикатор загрузки списка товаров --- */
+#product-list {
+  transition: opacity 0.2s;
+}
+
+#product-list.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* --- Цена, которую можно изменить кликом --- */
+.price-editable {
+  cursor: pointer;
+  border-bottom: 1px dashed currentColor;
+}
+
+.price-editable:hover {
+  color: var(--tblr-primary);
+}
+
+.price-input {
+  display: inline-block;
+  width: 7.5rem;
+}
+
+/* --- Стопка уведомлений в правом нижнем углу --- */
+.toast-stack {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1090;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 22rem;
+  max-width: calc(100vw - 2rem);
+}
+
+.toast-stack .toast {
+  width: 100%;
+}
+
+/* --- Кнопка темы: луна в светлой теме, солнце в тёмной --- */
+html[data-bs-theme="dark"] .theme-icon-moon,
+html:not([data-bs-theme="dark"]) .theme-icon-sun {
+  display: none;
+}
+
+/* --- Режим списка товаров: таблица или плитка --- */
+.view-table .products-cards,
+.view-cards .products-table {
+  display: none;
+}
+
+/* ===================== Адаптивность ===================== */
+
+/* Планшет и уже (до 991 px) */
+@media (max-width: 991.98px) {
+  .page-header .page-title {
+    font-size: 1.25rem;
+  }
+
+  .chart-card .card-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+/* Телефон (до 767 px) */
+@media (max-width: 767.98px) {
+  /* Таблица товаров не помещается, поэтому всегда плитка, а переключатель прячем */
+  #product-list .products-table {
+    display: none !important;
+  }
+
+  #product-list .products-cards {
+    display: flex !important;
+  }
+
+  .view-switch {
+    display: none !important;
+  }
+
+  /* Кнопки в шапке страницы и в карточках растягиваем, чтобы проще попадать пальцем */
+  .page-actions > .btn:not(.btn-icon) {
+    flex: 1 1 auto;
+  }
+
+  .card-footer .btn-list .btn {
+    flex: 1 1 0;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  /* 16px в полях ввода: иначе iPhone увеличивает страницу при фокусе */
+  .filters .form-control,
+  .filters .form-select,
+  .modal .form-control {
+    font-size: 16px;
+  }
+
+  /* Уведомления — по всей ширине снизу */
+  .toast-stack {
+    left: 1rem;
+    right: 1rem;
+    bottom: 0.75rem;
+    width: auto;
+  }
+}
+
+/* --- Убираем скролл у боковой панели --- */
+.navbar-vertical,
+.navbar-vertical .navbar-nav,
+.navbar-vertical .collapse {
+  overflow-y: visible !important;
+  max-height: none !important;
+  height: auto !important;
+}
+
+/* Убираем скролл у контейнера, в котором лежит sidebar */
+.navbar-vertical.navbar-expand-lg {
+  overflow: visible !important;
+}
+
+/* Если скролл появляется из-за фиксированной высоты viewport */
+.navbar-vertical .container-fluid {
+  overflow-y: visible !important;
+  max-height: none !important;
+}

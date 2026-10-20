@@ -1,0 +1,71 @@
+{% extends 'warehouse/base.html' %}
+{% load static %}
+
+{% block title %}Товары{% endblock %}
+
+{% block page_title %}
+  Товары <span class="badge bg-secondary-lt ms-2" id="products-count">{{ page_obj.paginator.count }}</span>
+{% endblock %}
+
+{% block page_actions %}
+  <div class="btn-group view-switch" role="group" aria-label="Вид списка">
+    <button type="button" class="btn btn-icon" data-view="table" title="Таблица">
+      <i class="ti ti-list"></i>
+    </button>
+    <button type="button" class="btn btn-icon" data-view="cards" title="Плитка">
+      <i class="ti ti-layout-grid"></i>
+    </button>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <form id="filter-form" class="card card-body mb-3 filters" method="get">
+    <div class="row g-2 align-items-end">
+      <div class="col-12 col-md-4">
+        <label class="form-label" for="f-q">Поиск</label>
+        <div class="input-icon">
+          <span class="input-icon-addon"><i class="ti ti-search"></i></span>
+          <input type="search" id="f-q" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Название или артикул" autocomplete="off">
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <label class="form-label" for="f-category">Категория</label>
+        <select id="f-category" name="category" class="form-select">
+          <option value="">Все категории</option>
+          {% for c in categories %}
+            <option value="{{ c.pk }}"{% if request.GET.category == c.pk|stringformat:"s" %} selected{% endif %}>
+              {{ c.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-6 col-sm-3 col-md-2">
+        <label class="form-label" for="f-per-page">На странице</label>
+        <select id="f-per-page" name="per_page" class="form-select">
+          {% for n in per_page_options %}
+            <option value="{{ n }}"{% if n == per_page %} selected{% endif %}>
+              {{ n }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-6 col-sm-3 col-md-3">
+        <label class="form-check form-switch mb-2">
+          <input class="form-check-input" type="checkbox" name="low" value="1"{% if request.GET.low == '1' %} checked{% endif %}>
+          <span class="form-check-label">Заканчивается</span>
+        </label>
+      </div>
+
+    </div>
+    <noscript>
+      <button type="submit" class="btn btn-primary mt-3">Применить</button>
+    </noscript>
+  </form>
+  <div id="product-list" class="view-table">
+    {% include 'warehouse/partials/_product_list.html' %}
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'warehouse/js/products.js' %}"></script>
+{% endblock %}

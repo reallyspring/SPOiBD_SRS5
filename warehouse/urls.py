@@ -1,0 +1,46 @@
+from django.urls import path
+from . import api, views
+app_name = 'warehouse'
+urlpatterns = [
+    path(
+        '', 
+        views.dashboard, 
+        name='dashboard'
+        ),
+    path(
+        'products/', 
+        views.product_list, 
+        name='product_list'),
+    path(
+        'products/<int:pk>/', 
+        views.product_detail, 
+        name='product_detail'),
+    path(
+        'movements/', 
+        views.movement_list, 
+        name='movement_list'),
+    path(
+        'api/products/search/', 
+        api.product_search, 
+        name='api_product_search'),
+    path(
+        'api/products/<int:pk>/move/', 
+        api.product_move, 
+        name='api_product_move'),
+    path(
+        'api/products/<int:pk>/price/', 
+        api.product_price, 
+        name='api_product_price'),
+    path(
+        'api/products/<int:pk>/archive/', 
+        api.product_archive, 
+        name='api_product_archive'),
+    path(
+        'api/products/<int:pk>/movements/', 
+        api.product_movements, 
+        name='api_product_movements'),
+    path(
+        'api/stats/movements/', 
+        api.stats_movements, 
+        name='api_stats_movements'),
+]

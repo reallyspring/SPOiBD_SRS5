@@ -1,0 +1,45 @@
+{% load l10n %}
+<tr data-product-id="{{ product.pk }}">
+  
+  <td>
+    <a href="{{ product.get_absolute_url }}" class="text-reset fw-medium">
+      {{ product.name }}
+    </a>
+    <div class="text-secondary small">{{ product.sku }}</div>
+  </td>
+  
+  <td class="d-none d-lg-table-cell">
+    <span class="badge bg-{{ product.category.color }}-lt">
+      {{ product.category.name }}
+    </span>
+  </td>
+  
+  <td class="d-none d-xl-table-cell text-secondary">
+    {{ product.supplier|default:"—" }}
+  </td>
+  
+  <td class="text-end text-nowrap">
+    <span class="price-editable" 
+          data-action="edit-price" 
+          data-field="price"
+          data-value="{{ product.price|unlocalize }}" 
+          title="Нажмите, чтобы изменить цену">
+      {{ product.price|floatformat:"2g" }} ₽
+    </span>
+  </td>
+  
+  <td class="text-end text-nowrap">
+    <strong data-field="quantity">{{ product.quantity }}</strong> 
+    {{ product.get_unit_display }}
+    <div class="text-secondary small">мин. {{ product.min_quantity }}</div>
+  </td>
+  
+  <td>
+    {% include 'warehouse/partials/_status_badge.html' %}
+  </td>
+  
+  <td>
+    {% include 'warehouse/partials/_product_actions.html' %}
+  </td>
+  
+</tr>

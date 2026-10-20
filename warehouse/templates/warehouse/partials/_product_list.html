@@ -1,0 +1,47 @@
+<div class="card products-table">
+  <div class="table-responsive">
+    <table class="table table-vcenter card-table">
+      <thead>
+        <tr>
+          <th>Товар</th>
+          <th class="d-none d-lg-table-cell">Категория</th>
+          <th class="d-none d-xl-table-cell">Поставщик</th>
+          <th class="text-end">Цена</th>
+          <th class="text-end">Остаток</th>
+          <th>Статус</th>
+          <th class="w-1"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+          {% include 'warehouse/partials/_product_row.html' %}
+        {% empty %}
+          <tr>
+            <td colspan="7" class="text-center text-secondary py-5">
+              Ничего не найдено
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row row-cards products-cards">
+  {% for product in products %}
+    {% include 'warehouse/partials/_product_card.html' %}
+  {% empty %}
+    <div class="col-12">
+      <div class="empty">
+        <p class="empty-title">Ничего не найдено</p>
+        <p class="empty-subtitle text-secondary">
+          Попробуйте изменить условия поиска
+        </p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<div class="mt-3">
+  {% include 'warehouse/partials/_pagination.html' %}
+</div>

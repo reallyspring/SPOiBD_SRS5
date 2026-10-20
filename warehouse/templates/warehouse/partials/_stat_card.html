@@ -1,0 +1,27 @@
+{# Параметры: title, value, icon, color; необязательные: suffix, hint #}
+<div class="card card-sm stat-card">
+  <div class="card-body">
+    <div class="row align-items-center">
+      
+      <div class="col-auto">
+        <span class="avatar bg-{{ color }}-lt">
+          <i class="ti ti-{{ icon }} fs-2"></i>
+        </span>
+      </div>
+      
+         <div class="col">
+        <div class="text-secondary">{{ title }}</div>
+        
+        <div class="h1 mb-0 stat-value">
+          {{ value }}{% if suffix %} {{ suffix }}{% endif %}
+        </div>
+        
+        {% if hint %}
+          <div class="text-secondary small">{{ hint }}</div>
+        {% endif %}
+        
+      </div>
+      
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+{% extends 'warehouse/base.html' %}
+
+{% block title %}Журнал операций{% endblock %}
+{% block page_title %}Журнал операций{% endblock %}
+
+{% block content %}
+  <div class="card">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a class="nav-link{% if not current_type %} active{% endif %}" 
+             href="{% url 'warehouse:movement_list' %}">
+            Все
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link{% if current_type == 'in' %} active{% endif %}" 
+             href="?type=in">
+            Приход
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link{% if current_type == 'out' %} active{% endif %}" 
+             href="?type=out">
+            Расход
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-vcenter card-table">
+        <thead>
+          <tr>
+            <th>Дата</th>
+            <th>Товар</th>
+            <th>Тип</th>
+            <th class="text-end">Кол-во</th>
+            <th class="d-none d-md-table-cell">Комментарий</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in movements %}
+            {% include 'warehouse/partials/_movement_row.html' with show_product=True %}
+          {% empty %}
+            <tr>
+              <td colspan="5" class="text-center text-secondary py-4">
+                Операций нет
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer">
+      {% include 'warehouse/partials/_pagination.html' %}
+    </div>
+
+  </div>
+{% endblock %}

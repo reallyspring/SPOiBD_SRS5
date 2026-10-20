@@ -1,0 +1,29 @@
+<tr>
+  <td class="text-nowrap text-secondary">
+    {{ m.created_at|date:"d.m.Y H:i" }}
+  </td>
+  {% if show_product %}
+    <td>
+      <a href="{{ m.product.get_absolute_url }}" class="text-reset">
+        {{ m.product.name }}
+      </a>
+    </td>
+  {% endif %}
+  <td>
+    {% if m.movement_type == 'in' %}
+      <span class="badge bg-green-lt">
+        <i class="ti ti-arrow-down-left me-1"></i>Приход
+      </span>
+    {% else %}
+      <span class="badge bg-red-lt">
+        <i class="ti ti-arrow-up-right me-1"></i>Расход
+      </span>
+    {% endif %}
+  </td>
+  <td class="text-end text-nowrap fw-medium {% if m.movement_type == 'in' %}text-green{% else %}text-red{% endif %}">
+    {% if m.movement_type == 'in' %}+{% else %}-{% endif %}{{ m.quantity }} {{ m.product.get_unit_display }}
+  </td>
+  <td class="d-none d-md-table-cell text-secondary">
+    {{ m.comment|default:"—" }}
+  </td>
+</tr>
