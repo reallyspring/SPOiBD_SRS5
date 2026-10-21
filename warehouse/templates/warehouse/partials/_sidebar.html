@@ -45,7 +45,14 @@
             <span class="nav-link-title">Журнал операций</span>
           </a>
         </li>
-
+        <li class="nav-item{% if url_name == 'catalog' %} active{% endif %}">
+          <a class="nav-link" href="{% url 'warehouse:catalog' %}">
+            <span class="nav-link-icon d-flex align-items-center justify-content-center">
+              <i class="ti ti-list-search"></i>
+            </span>
+            <span class="nav-link-title">Каталог</span>
+          </a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'admin:index' %}">
             <span class="nav-link-icon d-flex align-items-center justify-content-center">

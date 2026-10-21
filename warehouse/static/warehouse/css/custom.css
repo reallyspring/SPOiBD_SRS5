@@ -1,6 +1,3 @@
-/* Собственные стили поверх Tabler. Основа оформления — Tabler, здесь только доработки. */
-
-/* --- Подсветка изменённого элемента и плавное исчезновение --- */
 tr.flash > td,
 .flash {
   animation: flash-bg 1s ease-out;
@@ -20,13 +17,11 @@ tr.flash > td,
   transition: opacity 0.3s ease;
 }
 
-/* --- Счётчик в боковом меню: Tabler по умолчанию вешает бейдж в угол ссылки, ставим его в строку --- */
 .navbar-vertical .navbar-nav .nav-link .badge {
   position: static;
   transform: none;
 }
 
-/* --- Индикатор загрузки списка товаров --- */
 #product-list {
   transition: opacity 0.2s;
 }
@@ -36,7 +31,6 @@ tr.flash > td,
   pointer-events: none;
 }
 
-/* --- Цена, которую можно изменить кликом --- */
 .price-editable {
   cursor: pointer;
   border-bottom: 1px dashed currentColor;
@@ -51,7 +45,6 @@ tr.flash > td,
   width: 7.5rem;
 }
 
-/* --- Стопка уведомлений в правом нижнем углу --- */
 .toast-stack {
   position: fixed;
   right: 1rem;
@@ -68,21 +61,16 @@ tr.flash > td,
   width: 100%;
 }
 
-/* --- Кнопка темы: луна в светлой теме, солнце в тёмной --- */
 html[data-bs-theme="dark"] .theme-icon-moon,
 html:not([data-bs-theme="dark"]) .theme-icon-sun {
   display: none;
 }
 
-/* --- Режим списка товаров: таблица или плитка --- */
 .view-table .products-cards,
 .view-cards .products-table {
   display: none;
 }
 
-/* ===================== Адаптивность ===================== */
-
-/* Планшет и уже (до 991 px) */
 @media (max-width: 991.98px) {
   .page-header .page-title {
     font-size: 1.25rem;
@@ -94,9 +82,7 @@ html:not([data-bs-theme="dark"]) .theme-icon-sun {
   }
 }
 
-/* Телефон (до 767 px) */
 @media (max-width: 767.98px) {
-  /* Таблица товаров не помещается, поэтому всегда плитка, а переключатель прячем */
   #product-list .products-table {
     display: none !important;
   }
@@ -109,7 +95,6 @@ html:not([data-bs-theme="dark"]) .theme-icon-sun {
     display: none !important;
   }
 
-  /* Кнопки в шапке страницы и в карточках растягиваем, чтобы проще попадать пальцем */
   .page-actions > .btn:not(.btn-icon) {
     flex: 1 1 auto;
   }
@@ -122,14 +107,12 @@ html:not([data-bs-theme="dark"]) .theme-icon-sun {
     font-size: 1.5rem;
   }
 
-  /* 16px в полях ввода: иначе iPhone увеличивает страницу при фокусе */
   .filters .form-control,
   .filters .form-select,
   .modal .form-control {
     font-size: 16px;
   }
 
-  /* Уведомления — по всей ширине снизу */
   .toast-stack {
     left: 1rem;
     right: 1rem;
@@ -138,7 +121,6 @@ html:not([data-bs-theme="dark"]) .theme-icon-sun {
   }
 }
 
-/* --- Убираем скролл у боковой панели --- */
 .navbar-vertical,
 .navbar-vertical .navbar-nav,
 .navbar-vertical .collapse {
@@ -147,13 +129,26 @@ html:not([data-bs-theme="dark"]) .theme-icon-sun {
   height: auto !important;
 }
 
-/* Убираем скролл у контейнера, в котором лежит sidebar */
 .navbar-vertical.navbar-expand-lg {
   overflow: visible !important;
 }
 
-/* Если скролл появляется из-за фиксированной высоты viewport */
 .navbar-vertical .container-fluid {
   overflow-y: visible !important;
   max-height: none !important;
+}
+
+#catalog-list { min-height: 4rem; transition: opacity 0.2s; }
+#catalog-list.is-loading { opacity: 0.5; pointer-events: none; }
+.catalog-item.active .text-secondary { color: inherit !important; }
+
+@media (min-width: 768px) {
+  .catalog-detail { position: sticky; top: 1rem; }
+}
+
+@media (max-width: 767.98px) {
+  #catalog-form .form-control,
+  #catalog-form .form-select { font-size: 16px; }
+  #catalog-prev, #catalog-next { flex: 1 1 0; }
+  #catalog-page-label { display: none; }
 }

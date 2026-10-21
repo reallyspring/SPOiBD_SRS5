@@ -43,4 +43,16 @@ urlpatterns = [
         'api/stats/movements/', 
         api.stats_movements, 
         name='api_stats_movements'),
+    path(
+        'catalog/',
+        views.catalog,
+        name='catalog'),
+    path(
+        'api/catalog/',
+        api.catalog_list,
+        name='api_catalog_list'),
+    path(
+        'api/catalog/<int:pk>/',
+        api.catalog_detail,
+        name='api_catalog_detail'),
 ]

@@ -1,8 +1,11 @@
 import json
 from decimal import Decimal, InvalidOperation
+from django.core.paginator import Paginator
+from django.db.models import Q, Sum
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.views.decorators.http import require_GET, require_POST
 from . import services
 from .models import Product, StockMovement
@@ -157,4 +160,78 @@ def stats_movements(request):
         'ok': True, 
         'days': days, 
         **services.movement_chart_data(days),
+    })
+
+def _catalog_item(product):
+    return {
+        'id': product.pk,
+        'sku': product.sku,
+        'name': product.name,
+        'category': product.category.name,
+        'unit': product.get_unit_display(),
+        'price': str(product.price),
+        'quantity': product.quantity,
+        'min_quantity': product.min_quantity,
+        'status_label': product.status_label,
+        'status_color': product.status_color,
+    }
+
+
+@require_GET
+def catalog_list(request):
+    ordering = request.GET.get('ordering', 'name')
+    if ordering not in services.CATALOG_ORDERING:
+        return _error('Неизвестный порядок сортировки')
+
+    status = request.GET.get('status', '')
+    if status and status not in services.CATALOG_STATUSES:
+        return _error('Неизвестный статус остатка')
+
+    paginator = Paginator(services.catalog_queryset(request.GET),
+                          services.CATALOG_PAGE_SIZE)
+    page = paginator.get_page(request.GET.get('page'))
+    return JsonResponse({
+        'ok': True,
+        'count': paginator.count,
+        'page': page.number,
+        'pages': paginator.num_pages,
+        'results': [_catalog_item(p) for p in page.object_list],
+    })
+
+
+@require_GET
+def catalog_detail(request, pk):
+    product = (
+        Product.objects.active()
+        .select_related('category', 'supplier')
+        .filter(pk=pk)
+        .first()
+    )
+    if product is None:
+        return _error('Товар не найден', status=404)
+
+    totals = product.movements.aggregate(
+        total_in=Sum('quantity', filter=Q(movement_type=StockMovement.IN)),
+        total_out=Sum('quantity', filter=Q(movement_type=StockMovement.OUT)),
+    )
+    movements = [
+        {
+            'date': timezone.localtime(m.created_at).strftime('%d.%m.%Y %H:%M'),
+            'type': m.movement_type,
+            'quantity': m.quantity,
+            'comment': m.comment,
+        }
+        for m in product.movements.all()[:5]
+    ]
+    return JsonResponse({
+        'ok': True,
+        'product': {
+            **_catalog_item(product),
+            'supplier': str(product.supplier) if product.supplier else '—',
+            'stock_value': str(product.stock_value),
+            'total_in': totals['total_in'] or 0,
+            'total_out': totals['total_out'] or 0,
+            'url': product.get_absolute_url(),
+            'movements': movements,
+        },
     })

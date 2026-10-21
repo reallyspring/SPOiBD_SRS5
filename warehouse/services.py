@@ -131,3 +131,40 @@ def movement_chart_data(days):
         'income': [income[d] for d in dates],
         'outcome': [outcome[d] for d in dates],
     }
+
+CATALOG_PAGE_SIZE = 8
+
+CATALOG_ORDERING = {
+    'name': 'name',
+    '-name': '-name',
+    'price': 'price',
+    '-price': '-price',
+    'quantity': 'quantity',
+    '-quantity': '-quantity',
+    '-updated_at': '-updated_at',
+}
+
+CATALOG_STATUSES = ('in_stock', 'low', 'out')
+
+
+def catalog_queryset(params):
+    qs = Product.objects.active().select_related('category')
+
+    search = params.get('search', '').strip().lower()
+    if search:
+        qs = qs.filter(search_text__contains=search)
+
+    category = params.get('category', '')
+    if category.isdigit():
+        qs = qs.filter(category_id=int(category))
+
+    status = params.get('status', '')
+    if status == 'in_stock':
+        qs = qs.filter(quantity__gt=F('min_quantity'))
+    elif status == 'low':
+        qs = qs.filter(quantity__gt=0, quantity__lte=F('min_quantity'))
+    elif status == 'out':
+        qs = qs.filter(quantity=0)
+
+    ordering = CATALOG_ORDERING[params.get('ordering', 'name')]
+    return qs.order_by(ordering, 'pk')

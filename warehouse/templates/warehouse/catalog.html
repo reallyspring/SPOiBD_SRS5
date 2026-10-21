@@ -1,0 +1,88 @@
+{% extends 'warehouse/base.html' %}
+{% load static %}
+
+{% block title %}Каталог{% endblock %}
+{% block page_pretitle %}Интерактивный раздел{% endblock %}
+{% block page_title %}
+  Каталог товаров <span class="badge bg-secondary-lt ms-2" id="catalog-count">…</span>
+{% endblock %}
+
+{% block content %}
+<div class="card mb-3">
+  <div class="card-body">
+    <form id="catalog-form" class="row g-2 align-items-end" autocomplete="off">
+      <div class="col-12 col-lg-4">
+        <label class="form-label" for="c-search">Поиск</label>
+        <div class="input-icon">
+          <span class="input-icon-addon"><i class="ti ti-search"></i></span>
+          <input type="search" id="c-search" name="search" class="form-control" placeholder="Название или артикул">
+        </div>
+      </div>
+      <div class="col-12 col-lg-3">
+        <label class="form-label" for="c-category">Категория</label>
+        <select id="c-category" name="category" class="form-select">
+          <option value="">Все категории</option>
+          {% for c in categories %}
+            <option value="{{ c.pk }}">{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-2">
+        <label class="form-label" for="c-status">Остаток</label>
+        <select id="c-status" name="status" class="form-select">
+          <option value="">Любой</option>
+          <option value="in_stock">В наличии</option>
+          <option value="low">Заканчивается</option>
+          <option value="out">Нет в наличии</option>
+        </select>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <label class="form-label" for="c-ordering">Сортировка</label>
+        <select id="c-ordering" name="ordering" class="form-select">
+          <option value="name">По названию, А–Я</option>
+          <option value="-name">По названию, Я–А</option>
+          <option value="price">Сначала дешёвые</option>
+          <option value="-price">Сначала дорогие</option>
+          <option value="quantity">Меньше остаток</option>
+          <option value="-quantity">Больше остаток</option>
+          <option value="-updated_at">Недавно изменённые</option>
+        </select>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row row-cards">
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Товары</h3>
+      </div>
+      <div id="catalog-status"></div>
+      <div class="list-group list-group-flush" id="catalog-list"></div>
+      <div class="card-footer d-flex justify-content-between align-items-center gap-2">
+        <button type="button" class="btn" id="catalog-prev" disabled>
+          <i class="ti ti-chevron-left me-1"></i>Назад
+        </button>
+        <span class="text-secondary" id="catalog-page-label"></span>
+        <button type="button" class="btn" id="catalog-next" disabled>
+          Вперёд<i class="ti ti-chevron-right ms-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-5">
+    <div class="card catalog-detail" id="catalog-detail">
+      <div class="card-body text-center text-secondary py-5">
+        <i class="ti ti-hand-click fs-1 d-block mb-2"></i>
+        Выберите товар в списке, чтобы увидеть подробности
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'warehouse/js/catalog.js' %}"></script>
+{% endblock %}

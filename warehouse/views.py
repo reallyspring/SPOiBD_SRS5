@@ -63,3 +63,8 @@ def movement_list(request):
         'current_type': current_type,
     }
     return render(request, 'warehouse/movement_list.html', context)
+
+def catalog(request):
+    return render(request, 'warehouse/catalog.html', {
+        'categories': Category.objects.all(),
+    })
